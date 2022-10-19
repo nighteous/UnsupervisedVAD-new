@@ -1,5 +1,7 @@
 from Architecture.generator import *
 from Architecture.discriminator import *
+from dataset import CustomDataset
+
 import os
 import numpy as np
 import torch
@@ -8,7 +10,7 @@ from torch.utils.data import DataLoader
 # import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-path = '/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/UCF-Crime/all_rgbs'
+path = '/mnt/storage/AnomalyDetection/Dataset/UCF-Crime-npy/all_rgbs'
 num_output_features = len(os.listdir(path))
 # print(num_output_features)
 
@@ -53,11 +55,11 @@ print("Shape of features is {}".format(np.array(feats).shape))
 # clean_feat = np.array(clean_feat)
 # np.save('./clean_feat', clean_feat)
 
-clean_feat = np.array(feats) # with i3d no feature difference is below given Dth threshold so removed 
+clean_feat = np.array(feats) # with i3d no feature difference is below given Dth threshold so removed
 
-# print("Shape of cleaned features is {}".format(clean_feat.shape))
-# exit()
-train_dataset=DataLoader(clean_feat,batch_size=8192,shuffle=True)
+dataset = CustomDataset(clean_feat)
+
+train_dataset=DataLoader(dataset,batch_size=8192,shuffle=True)
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 epochs = 200
 
@@ -102,7 +104,7 @@ for epoch in range(epochs):
     epoch_loss = running_loss / len(train_dataset)
     # epoch_acc = running_corrects / len(normal_train_dataset) * 100.
     print("Loss: {}".format(epoch_loss))
-    epoch_losses.append(epoch_loss) 
+    epoch_losses.append(epoch_loss)
     outputs.append((epochs, i, reconstructed))
 
 epoch_losses = np.array(epoch_losses)
@@ -114,6 +116,7 @@ torch.save(netG.state_dict(),path)
 # print("BLOCK    ", 1)
 
 labels_g=[0]*(len(train_dataset.dataset)) # we need to calculate label for each data point
+print(labels_g)
 bat_size = train_dataset.batch_size
 arch_size = 1024
 
