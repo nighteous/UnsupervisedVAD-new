@@ -1,5 +1,4 @@
 __pycache__/
 Architecture/__pycache__/
-Losses/
 *.npy
 *.pth

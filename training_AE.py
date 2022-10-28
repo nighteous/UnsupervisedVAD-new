@@ -37,7 +37,8 @@ def options():
 
 args = options()
 
-train_normal_feats = np.load('~/local_scratch/Dataset/FeaturesResnext/normal_train_set_video_features.npy')
+FeatsPath = "/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/FeaturesResnext/"
+train_normal_feats = np.load(FeatsPath + "normal_train_set_video_features.npy")
 device = torch.device("cuda:0")
 
 # Architecture of AE
@@ -104,4 +105,4 @@ model_name = model_name[:-1]
 
 
 np.save('Losses/AE/{}.npy'.format(model_name), loss_values_train)
-torch.save(model.state_dict(), 'SavedModels/AE/{}.pth')
+torch.save(model.state_dict(), 'SavedModels/AE/{}.pth'.format(model_name))
