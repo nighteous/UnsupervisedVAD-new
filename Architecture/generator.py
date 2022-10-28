@@ -1,46 +1,43 @@
+from collections import OrderedDict
 import torch
 import torch.nn as nn
 
 class AE(nn.Module):
-    """
-    AutoEncoder class implemented according to the paper
-        FC[2048, 1024, 512, 256, 512, 1024, 2048]
-    """
 
-    def __init__(self):
+    def __init__(self, list):
         super().__init__()
 
-        img_size = 2048
+        # Traversing through the list to form both encoder and decoder layers
 
-        self.encoder = nn.Sequential(
+        if list[0] > 2048 or list[-1] > 2048:
+            # for resnext features
+            raise Exception("Feauture input or output must be of 2048")
 
-                # nn.Linear(2048, 1024),
-                # nn.ReLU(),
+        encoder_layers = []
+        for i in range(len(list)):
+            if list[i] < list[i+1]:
+                break
+            
+            layerName = [('linear{}'.format(i + 1), nn.Linear(list[i], list[i+1]),), ('batchnorm{}'.format(i +1), nn.BatchNorm1d(list[i+1])), ('relu{}'.format(i +1), nn.ReLU())]
 
-                nn.Linear(1024, 512),
-                nn.ReLU(),
+            encoder_layers.extend(layerName)
 
-                nn.Linear(512, 256),
-                nn.ReLU(),
 
-                nn.Linear(256, 128),
-                nn.ReLU()
-        )
+        decoder_layers = []
+        for i in range( (len(list)) // 2, len(list)):
 
-        self.decoder = nn.Sequential(
-                nn.Linear(128, 256),
-                nn.LeakyReLU(),
+            try:
+                layerName = [('linear{}'.format(i + 1), nn.Linear(list[i], list[i+1]),), 
+                            ('batchnorm{}'.format(i + 1), nn.BatchNorm1d(list[i+1])), 
+                            ('relu{}'.format(i + 1), nn.ReLU())
+                    ]
+                decoder_layers.extend(layerName)
 
-                nn.Linear(256, 512),
-                nn.LeakyReLU(0.3),
+            except:
+                pass
 
-                nn.Linear(512, 1024),
-                # nn.LeakyReLU(0.3),
-
-                # nn.Linear(1024, 2048),
-
-                nn.Sigmoid()
-        )
+        self.encoder = nn.Sequential(OrderedDict(encoder_layers))
+        self.decoder = nn.Sequential(OrderedDict(decoder_layers))
 
     def forward(self, img):
         encoded = self.encoder(img)
