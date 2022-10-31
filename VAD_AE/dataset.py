@@ -16,11 +16,11 @@ class Normal_Loader(Dataset):
         self.is_train = is_train
         self.path = path
         if self.is_train == 1:
-            data_list = 'train_normal.txt'
+            data_list = os.path.join(path, 'train_normal.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
         else:
-            data_list = 'test_normalv2.txt'
+            data_list = os.path.join(path, 'test_normalv2.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
             # self.data_list = self.data_list[:-10]
@@ -52,11 +52,11 @@ class Normal_Loader_indexed(Dataset):
         self.is_train = is_train
         self.path = path
         if self.is_train == 1:
-            data_list = 'train_normal.txt'
+            data_list = os.path.join(path, 'train_normal.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
         else:
-            data_list = 'test_normalv2.txt'
+            data_list = os.path.join(path, 'test_normalv2.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
             # self.data_list = self.data_list[:-10]
@@ -89,11 +89,11 @@ class Anomaly_Loader(Dataset):
         self.is_train = is_train
         self.path = path
         if self.is_train == 1:
-            data_list = 'train_anomaly.txt'
+            data_list = os.path.join(path, 'train_anomaly.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
         else:
-            data_list = 'test_anomalyv2.txt'
+            data_list = os.path.join(path, 'test_anomalyv2.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
 
@@ -126,11 +126,11 @@ class Anomaly_Loader_indexed(Dataset):
         self.is_train = is_train
         self.path = path
         if self.is_train == 1:
-            data_list = 'train_anomaly.txt'
+            data_list = os.path.join(path, 'train_anomaly.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
         else:
-            data_list = 'test_anomalyv2.txt'
+            data_list = os.path.join(path, 'test_anomalyv2.txt')
             with open(data_list, 'r') as f:
                 self.data_list = f.readlines()
 
