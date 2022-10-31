@@ -1,0 +1,86 @@
+Learning Rate: 0.0004
+Weight Decay: 0.0001
+Epochs: 20
+Batch Size: 128
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=2048, out_features=1024, bias=True)
+    (batchnorm1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu1): ReLU()
+    (linear2): Linear(in_features=1024, out_features=512, bias=True)
+    (batchnorm2): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu2): ReLU()
+    (linear3): Linear(in_features=512, out_features=256, bias=True)
+    (batchnorm3): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu3): ReLU()
+    (linear4): Linear(in_features=256, out_features=128, bias=True)
+    (batchnorm4): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu4): ReLU()
+  )
+  (decoder): Sequential(
+    (linear5): Linear(in_features=128, out_features=248, bias=True)
+    (batchnorm5): BatchNorm1d(248, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu5): ReLU()
+    (linear6): Linear(in_features=248, out_features=512, bias=True)
+    (batchnorm6): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu6): ReLU()
+    (linear7): Linear(in_features=512, out_features=1024, bias=True)
+    (batchnorm7): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu7): ReLU()
+    (linear8): Linear(in_features=1024, out_features=2048, bias=True)
+    (batchnorm8): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu8): ReLU()
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0004
+    maximize: False
+    weight_decay: 0.0001
+)
+Epoch 1
+Train Loss: 0.3193109897145035
+Epoch 2
+Train Loss: 0.013923713290884899
+Epoch 3
+Train Loss: 0.012984241506315957
+Epoch 4
+Train Loss: 0.013080319141321775
+Epoch 5
+Train Loss: 0.013142507215412111
+Epoch 6
+Train Loss: 0.0131635359784245
+Epoch 7
+Train Loss: 0.013165977789579588
+Epoch 8
+Train Loss: 0.013167858282347272
+Epoch 9
+Train Loss: 0.013163373904335135
+Epoch 10
+Train Loss: 0.01316333965854166
+Epoch 11
+Train Loss: 0.013166578896768318
+Epoch 12
+Train Loss: 0.01316991731692902
+Epoch 13
+Train Loss: 0.013163079139418868
+Epoch 14
+Train Loss: 0.013164735401168711
+Epoch 15
+Train Loss: 0.013168557850073852
+Epoch 16
+Train Loss: 0.013174302980562406
+Epoch 17
+Train Loss: 0.01316389000318829
+Epoch 18
+Train Loss: 0.013164870965555648
+Epoch 19
+Train Loss: 0.013160257242853262
+Epoch 20
+Train Loss: 0.013163432773929251
+Time taken by 20 epochs: 7.77075868844986

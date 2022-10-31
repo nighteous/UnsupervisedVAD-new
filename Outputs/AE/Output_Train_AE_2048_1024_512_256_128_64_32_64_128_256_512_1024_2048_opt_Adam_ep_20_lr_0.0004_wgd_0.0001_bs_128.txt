@@ -1,0 +1,98 @@
+Learning Rate: 0.0004
+Weight Decay: 0.0001
+Epochs: 20
+Batch Size: 128
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=2048, out_features=1024, bias=True)
+    (batchnorm1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu1): ReLU()
+    (linear2): Linear(in_features=1024, out_features=512, bias=True)
+    (batchnorm2): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu2): ReLU()
+    (linear3): Linear(in_features=512, out_features=256, bias=True)
+    (batchnorm3): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu3): ReLU()
+    (linear4): Linear(in_features=256, out_features=128, bias=True)
+    (batchnorm4): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu4): ReLU()
+    (linear5): Linear(in_features=128, out_features=64, bias=True)
+    (batchnorm5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu5): ReLU()
+    (linear6): Linear(in_features=64, out_features=32, bias=True)
+    (batchnorm6): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu6): ReLU()
+  )
+  (decoder): Sequential(
+    (linear7): Linear(in_features=32, out_features=64, bias=True)
+    (batchnorm7): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu7): ReLU()
+    (linear8): Linear(in_features=64, out_features=128, bias=True)
+    (batchnorm8): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu8): ReLU()
+    (linear9): Linear(in_features=128, out_features=256, bias=True)
+    (batchnorm9): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu9): ReLU()
+    (linear10): Linear(in_features=256, out_features=512, bias=True)
+    (batchnorm10): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu10): ReLU()
+    (linear11): Linear(in_features=512, out_features=1024, bias=True)
+    (batchnorm11): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu11): ReLU()
+    (linear12): Linear(in_features=1024, out_features=2048, bias=True)
+    (batchnorm12): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu12): ReLU()
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0004
+    maximize: False
+    weight_decay: 0.0001
+)
+Epoch 1
+Train Loss: 0.24373487109051276
+Epoch 2
+Train Loss: 0.019449445344398457
+Epoch 3
+Train Loss: 0.01676111190265867
+Epoch 4
+Train Loss: 0.01642110660785652
+Epoch 5
+Train Loss: 0.01643126825710411
+Epoch 6
+Train Loss: 0.016433643217674605
+Epoch 7
+Train Loss: 0.016438900901221735
+Epoch 8
+Train Loss: 0.016439250463530324
+Epoch 9
+Train Loss: 0.016437704686924317
+Epoch 10
+Train Loss: 0.01643832251334417
+Epoch 11
+Train Loss: 0.016442786393186054
+Epoch 12
+Train Loss: 0.016447809148235217
+Epoch 13
+Train Loss: 0.016446316868631995
+Epoch 14
+Train Loss: 0.016451303233828422
+Epoch 15
+Train Loss: 0.01645032055760553
+Epoch 16
+Train Loss: 0.016452781371458676
+Epoch 17
+Train Loss: 0.016449192481420617
+Epoch 18
+Train Loss: 0.016446642546110755
+Epoch 19
+Train Loss: 0.01644428779811197
+Epoch 20
+Train Loss: 0.01644914966119602
+Time taken by 20 epochs: 10.381048333644866

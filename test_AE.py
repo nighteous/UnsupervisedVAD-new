@@ -1,5 +1,6 @@
 import argparse
 from pickle import TRUE
+import time
 
 from Architecture.generator import AE
 
@@ -42,7 +43,7 @@ args = options()
 
 # Loading Features
 FeatsPath = "/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/FeaturesResnext/"
-feats_complete_test = np.load(FeatsPath + "anomalous_test_set_video_features.npy", allow_pickle=True)
+feats_anomalous_test = np.load(FeatsPath + "anomalous_test_set_video_features.npy", allow_pickle=True)
 feats_normal_test = np.load(FeatsPath + "all_test_set_video_features.npy", allow_pickle=True)
 
 # Defining Device
@@ -74,7 +75,7 @@ except Exception as e:
 
 model.load_state_dict(torch.load('SavedModels/AE/{}.pth'.format(filesuffix)))
 
-device = "cuda:3" if torch.cuda.is_available() else "cpu"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 # print("Device in use is {}".format(device))
 torch.manual_seed(18)
 model = model.to(device)
@@ -92,7 +93,7 @@ transform = transforms.Compose([
 
 
 normal_test_dataset = DataLoader(feats_normal_test, batch_size = 1, shuffle = False)
-complete_test_dataset = DataLoader(feats_complete_test, batch_size = 1, shuffle = False)
+anomalous_test_dataset = DataLoader(feats_anomalous_test, batch_size = 1, shuffle = False)
 
 
 criterion = nn.MSELoss()
@@ -104,6 +105,9 @@ epochs = 1
 loss_values_test = []
 normal_predictions = []
 anomalous_predictions = []
+
+
+startTime = time.time()
 
 for epoch in range(epochs):
 
@@ -130,22 +134,25 @@ for epoch in range(epochs):
 
 
     # on test set anomalous
-    complete_test_loss = 0
+    anomalous_test_loss = 0
     model.eval()
     with torch.no_grad():
-        for idx, img in tqdm(enumerate(complete_test_dataset)):
+        for idx, img in tqdm(enumerate(anomalous_test_dataset)):
 
             img = img.to(device)
             prediction = model(img)
 
             loss = criterion(prediction, img)
-            complete_test_loss += loss.item() * img.size(0)
+            anomalous_test_loss += loss.item() * img.size(0)
             anomalous_predictions.append(loss.item())
 
-    complete_test_loss /= len(complete_test_dataset)
-    loss_values_test.append(complete_test_loss)
-    print("Test Loss Complete: {}".format(complete_test_loss))
-    result.write("Test Loss Complete: {}\n".format(complete_test_loss))
+    anomalous_test_loss /= len(anomalous_test_dataset)
+    loss_values_test.append(anomalous_test_loss)
+    print("Test Loss Anomalous: {}".format(anomalous_test_loss))
+    result.write("Test Loss Anomalous: {}\n".format(anomalous_test_loss))
+
+endTime = time.time()
+result.write("Time taken by {} epochs: {}".format(epochs, (endTime - startTime)/60))
 
 
 np.save('Losses/AE/Test_Loss_{}.npy'.format(model_name), loss_values_test)

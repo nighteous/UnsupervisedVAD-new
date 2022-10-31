@@ -1,0 +1,29 @@
+{
+    "os": "Linux-5.15.0-46-generic-x86_64-with-glibc2.31",
+    "python": "3.9.12",
+    "heartbeatAt": "2022-10-29T19:34:48.074268",
+    "startedAt": "2022-10-29T19:34:47.091239",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_count": 8,
+    "cpu_count": 256,
+    "cuda": null,
+    "args": [
+        "--arch",
+        "2048,1024,512,248,512,1024,2048",
+        "--epochs",
+        "20"
+    ],
+    "state": "running",
+    "program": "/local/scratch/v_varenyam_bhardwaj/UnsupervisedVAD-new/Automated/train_AE.py",
+    "codePath": "train_AE.py",
+    "git": {
+        "remote": "git@github.com:airpods69/UnsupervisedVAD-new.git",
+        "commit": "e77a144e84714491343de715f6570624c4a3645b"
+    },
+    "email": "varenyambhardwaj123@gmail.com",
+    "root": "/local/scratch/v_varenyam_bhardwaj/UnsupervisedVAD-new/Automated",
+    "host": "a61e424b7e29",
+    "username": "v_varenyam_bhardwaj",
+    "executable": "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/bin/python"
+}

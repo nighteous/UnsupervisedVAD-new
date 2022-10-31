@@ -1,0 +1,107 @@
+
+Epoch 1
+
+
+
+
+
+
+
+
+
+
+
+2500it [00:23, 120.00it/s]
+Train Loss: 0.4842096715737409
+
+2643it [00:25, 105.55it/s]
+
+
+
+
+
+
+
+
+
+
+
+2643it [00:23, 112.75it/s]
+Train Loss: 0.02051117741233256
+Epoch 3
+
+
+
+
+
+
+
+
+
+
+
+2643it [00:23, 112.56it/s]
+Train Loss: 0.011127357655736917
+Epoch 4
+
+
+
+
+
+
+
+
+
+
+
+2643it [00:23, 113.70it/s]
+Train Loss: 0.01223717028980936
+Epoch 5
+
+
+
+
+
+
+
+
+
+
+
+
+2643it [00:25, 103.74it/s]
+Train Loss: 0.012282008384035514
+Epoch 6
+
+
+
+
+
+
+
+
+1985it [00:18, 105.04it/s]
+Traceback (most recent call last):
+  File "/local/scratch/v_varenyam_bhardwaj/UnsupervisedVAD-new/Automated/train_AE.py", line 118, in <module>
+    for idx, img in tqdm(enumerate(train_dataset)):
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/site-packages/tqdm/std.py", line 1195, in __iter__
+    for obj in iterable:
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 652, in __next__
+    data = self._next_data()
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1330, in _next_data
+    idx, data = self._get_data()
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1296, in _get_data
+    success, data = self._try_get_data()
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 1134, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/multiprocessing/queues.py", line 113, in get
+    if not self._poll(timeout):
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/multiprocessing/connection.py", line 262, in poll
+    return self._poll(timeout)
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/multiprocessing/connection.py", line 429, in _poll
+    r = wait([self], timeout)
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/multiprocessing/connection.py", line 936, in wait
+    ready = selector.select(timeout)
+  File "/shared/home/v_varenyam_bhardwaj/Utils/miniconda3/envs/pytorch/lib/python3.9/selectors.py", line 413, in select
+    timeout = math.ceil(timeout * 1e3)
+KeyboardInterrupt

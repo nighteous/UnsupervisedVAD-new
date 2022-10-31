@@ -1,6 +1,7 @@
 import argparse
 from collections import OrderedDict
 from pickle import TRUE
+import time
 
 from Architecture.generator import AE
 
@@ -13,6 +14,7 @@ from torchvision import transforms
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from typing import List
+import wandb
 
 
 def options():
@@ -33,11 +35,17 @@ def options():
 
     parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='Adam', help="Optimizer to be used -> Doesn't work")
 
+    parser.add_argument('--count', dest='count', type=int, default=0, help="Count for handling project names")
+
 
     return parser.parse_args()
 
 
 args = options()
+
+# wandb initialization
+wandb.init(project="autoencoder{}".format(args.count), config = args)
+
 
 FeatsPath = "/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/FeaturesResnext/"
 train_normal_feats = np.load(FeatsPath + "normal_train_set_video_features.npy")
@@ -48,6 +56,9 @@ device = torch.device("cuda:0")
 # Architecture of AE
 model_arch = [int(i) for i in args.arch.split(',')]
 model = AE(model_arch).to(device)
+
+wandb.watch(model, log_freq = 100)
+
 
 model_name = "AE_"
 for i in model_arch:
@@ -93,6 +104,7 @@ epochs = args.epochs
 loss_values_train = []
 loss_values_test = []
 
+startTime = time.time()
 
 for epoch in range(epochs):
 
@@ -116,11 +128,21 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
 
+        if idx % 100: 
+            wandb.log({"Loss": train_loss})
+
+
     train_loss /= len(train_dataset)
     loss_values_train.append(train_loss)
+
+    wandb.log({"Train Loss": train_loss})
+
     print("Train Loss: {}".format(train_loss))
     result.write("Train Loss: {}\n".format(train_loss))
 
+endTime = time.time()
+
+result.write("Time taken by {} epochs: {}".format(epochs, (endTime - startTime)/60))
 
 np.save('Losses/AE/Loss_Train_{}.npy'.format(filesuffix), loss_values_train)
 torch.save(model.state_dict(), 'SavedModels/AE/{}.pth'.format(filesuffix))

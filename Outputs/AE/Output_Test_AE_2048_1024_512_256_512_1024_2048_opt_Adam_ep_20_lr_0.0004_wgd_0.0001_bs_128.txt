@@ -1,0 +1,39 @@
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=2048, out_features=1024, bias=True)
+    (batchnorm1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu1): ReLU()
+    (linear2): Linear(in_features=1024, out_features=512, bias=True)
+    (batchnorm2): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu2): ReLU()
+    (linear3): Linear(in_features=512, out_features=256, bias=True)
+    (batchnorm3): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu3): ReLU()
+  )
+  (decoder): Sequential(
+    (linear4): Linear(in_features=256, out_features=512, bias=True)
+    (batchnorm4): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu4): ReLU()
+    (linear5): Linear(in_features=512, out_features=1024, bias=True)
+    (batchnorm5): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu5): ReLU()
+    (linear6): Linear(in_features=1024, out_features=2048, bias=True)
+    (batchnorm6): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu6): ReLU()
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0004
+    maximize: False
+    weight_decay: 0.0001
+)
+Test Loss Normal: 0.00011771075733560879
+Test Loss Anomalous: 0.00012968582527196209
+Time taken by 1 epochs: 1.298115356763204Thresholds are: tensor([1.0000e+00, 3.3796e-04, 3.3794e-04,  ..., 4.3661e-05, 4.3411e-05,
+        4.3340e-05])

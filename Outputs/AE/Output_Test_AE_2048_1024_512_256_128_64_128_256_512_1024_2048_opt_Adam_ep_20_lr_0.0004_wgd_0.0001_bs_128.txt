@@ -1,0 +1,51 @@
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=2048, out_features=1024, bias=True)
+    (batchnorm1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu1): ReLU()
+    (linear2): Linear(in_features=1024, out_features=512, bias=True)
+    (batchnorm2): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu2): ReLU()
+    (linear3): Linear(in_features=512, out_features=256, bias=True)
+    (batchnorm3): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu3): ReLU()
+    (linear4): Linear(in_features=256, out_features=128, bias=True)
+    (batchnorm4): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu4): ReLU()
+    (linear5): Linear(in_features=128, out_features=64, bias=True)
+    (batchnorm5): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu5): ReLU()
+  )
+  (decoder): Sequential(
+    (linear6): Linear(in_features=64, out_features=128, bias=True)
+    (batchnorm6): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu6): ReLU()
+    (linear7): Linear(in_features=128, out_features=256, bias=True)
+    (batchnorm7): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu7): ReLU()
+    (linear8): Linear(in_features=256, out_features=512, bias=True)
+    (batchnorm8): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu8): ReLU()
+    (linear9): Linear(in_features=512, out_features=1024, bias=True)
+    (batchnorm9): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu9): ReLU()
+    (linear10): Linear(in_features=1024, out_features=2048, bias=True)
+    (batchnorm10): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu10): ReLU()
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0004
+    maximize: False
+    weight_decay: 0.0001
+)
+Test Loss Normal: 0.00013778028253894357
+Test Loss Anomalous: 0.00015132718175224393
+Time taken by 1 epochs: 1.9852457125981648Thresholds are: tensor([1.0000e+00, 3.3942e-04, 3.3941e-04,  ..., 5.6117e-05, 5.5779e-05,
+        5.5029e-05])
