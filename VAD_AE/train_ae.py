@@ -1,4 +1,3 @@
-import flake8.utils
 import torch
 from torch.utils.data import DataLoader
 from dataset import *
