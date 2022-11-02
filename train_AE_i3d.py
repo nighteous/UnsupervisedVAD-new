@@ -19,19 +19,22 @@ def options():
 
     parser.add_argument('--lr', dest='lr', type=float, default=3e-4,help="Learning rate of model")
     parser.add_argument('--epochs', dest='epochs', type=int, default=20, help="Number of Epochs to train model")
+    parser.add_argument('--n', dest='n_trails', type=int, default=5, help ="Number of times to train the model")
     parser.add_argument('--batch-size', dest='batchsize', type=int, default=32, help="Batch size of data")
     parser.add_argument('--weight-decay', dest='weightdecay', type=float, default=1e-4, help="Weight decay")
-    parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='SGD', help="Optimizer to be used -> Doesn't work")
+    parser.add_argument('--dropout', dest='dropout', type=float, default=0, help ="Dropout layer value")
+    parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='SGD', help="Optimizer to be used\n1. SGD\n2. Adam")
 
     return parser.parse_args()
 
 args = options()
 
-device = torch.device("cuda:0")
+device = torch.device("cuda:7")
+torch.manual_seed(18)
 
 # Architecture of AE
 model_arch = [int(i) for i in args.arch.split(',')]
-model = AE(model_arch).to(device)
+model = AE(model_arch, args.dropout).to(device)
 
 model_name = "AE_"
 for i in model_arch:
@@ -39,15 +42,13 @@ for i in model_arch:
 
 model_name = model_name[:-1]
 
-torch.manual_seed(18)
-
 # optimizer = torch.optim.Adam(model.parameters(), lr = args.lr, weight_decay=args.weightdecay)
 criterion = nn.MSELoss()
 
-filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize)
+filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}_dropout_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize, args.dropout)
 
 try:
-    result = open("Outputs/AE/Output_Train_i3d_{}.txt".format(filesuffix), "w")
+    result = open("Outputs/AE/i3d/Output_Train_i3d_{}.txt".format(filesuffix), "w")
 except Exception as e:
     print(e)
     exit()
@@ -90,7 +91,11 @@ anomaly_test_loader = DataLoader(anomaly_test_dataset,
                                 shuffle=True
                             )
 
-optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
+if args.optimizer_name.lower() == "sgd":
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
+elif args.optimizer_name.lower() == "adam":
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
+
 result.write(str(optimizer) + "\n")
 
 
@@ -156,49 +161,64 @@ def test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device)
 
         auc = metrics.roc_auc_score(all_gt_list, all_score_list)
         print('error normal: %.3f' % (error_n / counter))
+        result.write('error normal: %.3f' % (error_n / counter))
         # print(f"The AUC SCORE is {auc}")
 
     return auc * 100
+all_auc = []
+
+for j in range(args.n_trails):
+    print("\nN Trail: {}".format(j))
+    result.write("\nN Trail: {}".format(j))
 
 
-epochs = args.epochs
-best_auc = 0
+    epochs = args.epochs
+    best_auc = 0
+    
+    model = AE(model_arch, args.dropout).to(device)
+    for epoch in range(epochs):
+        print("\nEpoch: {}".format(epoch))
+        result.write("\nEpoch {}".format(epoch+1))
 
-for epoch in range(epochs):
-    print("\nEpoch: {}".format(epoch))
-    result.write("Epoch {}\n".format(epoch+1))
+        model.train()
+        train_loss = 0
+        correct = 0
+        total = 0
 
-    model.train()
-    train_loss = 0
-    correct = 0
-    total = 0
+        am_util = AverageMeter()
 
-    am_util = AverageMeter()
+        for idx, data in tqdm(enumerate(normal_train_loader)):
+            data = data[0].to(device)
+            data = data.view(-1, 1024)
 
-    for idx, data in tqdm(enumerate(normal_train_loader)):
-        data = data[0].to(device)
-        data = data.view(-1, 1024)
+            output = model(data)
 
-        output = model(data)
+            loss = torch.abs(output - data)
+            loss = loss.sum(1).mean(0)
 
-        loss = torch.abs(output - data)
-        loss = loss.sum(1).mean(0)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            train_loss += loss.item()
 
-        train_loss += loss.item()
+        test_auc = test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device)
 
-    test_auc = test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device)
 
-    if test_auc > best_auc:
-        best_auc = test_auc
-    print('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
-    result.write('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
+        if test_auc > best_auc:
+            best_auc = test_auc
+        print('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
+        result.write('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
 
-result.write("Best AUC: {}\n".format(best_auc))
 
-torch.save(model.state_dict(), "./SavedModels/AEi3d//{}.pth".format(filesuffix))
+    print("\nBest AUC: {}\n".format(best_auc))
+    result.write("\nBest AUC: {}\n".format(best_auc))
+
+    all_auc.append(best_auc)
+
+aucs = np.array(all_auc)
+print('AUC stats over %d runs : mean: %.2f, std: %.2f'% (args.n_trails, aucs.mean(), aucs.std()))
+
+torch.save(model.state_dict(), "./SavedModels/AEi3d/{}.pth".format(filesuffix))
 result.close()
 

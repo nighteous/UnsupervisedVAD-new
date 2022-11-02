@@ -1,12 +1,17 @@
 import os 
 
-models = ["2048,1024,512,256,512,1024,2048", "2048,1024,512,256,128,248,512,1024,2048", "2048,1024,512,256,128,64,128,256,512,1024,2048", "2048,1024,512,128,64,32,64,128,256,512,1024,2048"]
+models = ["1024,512,256,128,256,512,1024" ,"1024,512,256,128,64,128,256,512,1024", "1024,512,256,128,64,32,64,128,256,512,1024", "1024,512,256,128,64,32,16,32,64,128,256,512,1024"]
+lr = [0.01 ,1e-4, 3e-4]
+weightdecay = [0, 1e-4]
+dropout = [0, 0.4, 0.6]
+opti = ["Adam", "SGD"]
 
-for i in models:
-    command_train = "python train_AE.py --arch {}".format(i)
-    command_test = "python test_AE.py --arch {}".format(i)
+for arch in models:
+    for l in lr:
+        for opt in opti:
+            for wd in weightdecay:
+                for d in dropout:
+                    command_train = "python train_AE_i3d.py --arch {} --lr {} --optimizer {} --weight-decay {} --dropout {}".format(arch, l, opt, wd, d)
 
-    print(command_train)
-    os.system(command_train)
-    print(command_test)
-    os.system(command_test)
+                    print(command_train)
+                    os.system(command_train)
