@@ -1,5 +1,4 @@
 import argparse
-from pickle import TRUE
 
 from Architecture.generator import AE
 
@@ -18,9 +17,9 @@ from torchmetrics.functional.classification import binary_roc
 def options():
     # Arguments to pass from terminal to make our lives easier
     parser = argparse.ArgumentParser(description='Testing of AE')
-    parser.add_argument('--arch', 
-                        dest='arch', 
-                        type=str, 
+    parser.add_argument('--arch',
+                        dest='arch',
+                        type=str,
                         default='idk',
                         help="Architecture of the model Eg: 1,2,3,4")
 
@@ -61,7 +60,7 @@ for i in arch:
 model_name = model_name[:-1]
 
 
-filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize) 
+filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize)
 
 
 try:
@@ -108,7 +107,7 @@ anomalous_predictions = []
 for epoch in range(epochs):
 
     # on test set normal
-    
+
     test_loss_normal = 0
     model.eval()
     with torch.no_grad():

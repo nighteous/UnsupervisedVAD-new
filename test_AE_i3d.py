@@ -1,69 +1,48 @@
-from torch.utils.data import DataLoader
-from Architecture.generator import AE
-from utils import AverageMeter
-
-from sklearn import metrics
 import argparse
+
+from Architecture.generator import AE
+
+from dataset import *
+
 import torch
 import torch.nn as nn
+import os
+import numpy as np
+from torch.utils.data import DataLoader
+from torchvision import transforms
 from tqdm import tqdm
-from dataset import *
+import matplotlib.pyplot as plt
+from torchmetrics.classification import BinaryROC
+from torchmetrics import ROC
+from torchmetrics.functional.classification import binary_roc
+from sklearn import metrics
 
 def options():
     # Arguments to pass from terminal to make our lives easier
-    parser = argparse.ArgumentParser(description='Training of AE')
+    parser = argparse.ArgumentParser(description='Testing of AE')
     parser.add_argument('--arch',
                         dest='arch',
                         type=str,
+                        default='idk',
                         help="Architecture of the model Eg: 1,2,3,4")
 
     parser.add_argument('--lr', dest='lr', type=float, default=3e-4,help="Learning rate of model")
+
     parser.add_argument('--epochs', dest='epochs', type=int, default=20, help="Number of Epochs to train model")
-    parser.add_argument('--batch-size', dest='batchsize', type=int, default=32, help="Batch size of data")
+
+    parser.add_argument('--batch-size', dest='batchsize', type=int, default=128, help="Batch size of data")
+
     parser.add_argument('--weight-decay', dest='weightdecay', type=float, default=1e-4, help="Weight decay")
+
     parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='SGD', help="Optimizer to be used -> Doesn't work")
 
     return parser.parse_args()
 
+
 args = options()
 
-device = torch.device("cuda:0")
 
-# Architecture of AE
-model_arch = [int(i) for i in args.arch.split(',')]
-model = AE(model_arch).to(device)
-
-model_name = "AE_"
-for i in model_arch:
-    model_name += str(i) + "_"
-
-model_name = model_name[:-1]
-
-torch.manual_seed(18)
-
-# optimizer = torch.optim.Adam(model.parameters(), lr = args.lr, weight_decay=args.weightdecay)
-criterion = nn.MSELoss()
-
-filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize)
-
-try:
-    result = open("Outputs/AE/Output_Train_i3d_{}.txt".format(filesuffix), "w")
-except Exception as e:
-    print(e)
-    exit()
-
-result.write("Learning Rate: {}\n".format(args.lr))
-result.write("Weight Decay: {}\n".format(args.weightdecay))
-result.write("Epochs: {}\n".format(args.epochs))
-result.write("Batch Size: {}\n".format(args.batchsize))
-result.write(str(model) + "\n")
-
-best_loss = 1e10
-epochs = args.epochs
-
-loss_values_train = []
-loss_values_test = []
-
+# Loading Features
 normal_train_dataset = Normal_Loader_indexed(is_train=1)
 normal_test_dataset = Normal_Loader(is_train=0)
 
@@ -90,8 +69,59 @@ anomaly_test_loader = DataLoader(anomaly_test_dataset,
                                 shuffle=True
                             )
 
-optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
+# Defining Device
+try:
+    device = torch.device("cuda:0")
+except:
+    device = torch.device("cpu")
+
+# from AutoEncoder import AE
+arch = [int(i) for i in args.arch.split(',')]
+model = AE(arch).to(device)
+
+model_name = "AE_"
+for i in arch:
+    model_name += str(i) + "_"
+model_name = model_name[:-1]
+
+
+filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize)
+
+
+try:
+    result = open("Outputs/AE/Output_Test_{}.txt".format(filesuffix), "w")
+except Exception as e:
+    print(e)
+    exit()
+
+
+
+model.load_state_dict(torch.load('SavedModels/AEi3d/{}.pth'.format(filesuffix)))
+
+device = "cuda:3" if torch.cuda.is_available() else "cpu"
+# print("Device in use is {}".format(device))
+torch.manual_seed(18)
+model = model.to(device)
+
+# Not used (needed for input to file)
+optimizer = torch.optim.SGD(model.parameters(), lr = args.lr, weight_decay=args.weightdecay)
+
+result.write(str(model) + "\n")
 result.write(str(optimizer) + "\n")
+
+
+transform = transforms.Compose([
+    transforms.ToTensor()
+    ])
+
+criterion = nn.MSELoss()
+
+best_loss = 1e10
+epochs = 1
+
+loss_values_test = []
+normal_predictions = []
+anomalous_predictions = []
 
 
 def test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device):
@@ -160,45 +190,4 @@ def test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device)
 
     return auc * 100
 
-
-epochs = args.epochs
-best_auc = 0
-
-for epoch in range(epochs):
-    print("\nEpoch: {}".format(epoch))
-    result.write("Epoch {}\n".format(epoch+1))
-
-    model.train()
-    train_loss = 0
-    correct = 0
-    total = 0
-
-    am_util = AverageMeter()
-
-    for idx, data in tqdm(enumerate(normal_train_loader)):
-        data = data[0].to(device)
-        data = data.view(-1, 1024)
-
-        output = model(data)
-
-        loss = torch.abs(output - data)
-        loss = loss.sum(1).mean(0)
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        train_loss += loss.item()
-
-    test_auc = test_abnormal(epoch, model, normal_test_loader, anomaly_test_loader, device)
-
-    if test_auc > best_auc:
-        best_auc = test_auc
-    print('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
-    result.write('\ntest AUC: %.2f, best AUC: %.2f' % (test_auc, best_auc))
-
-result.write("Best AUC: {}\n".format(best_auc))
-
-torch.save(model.state_dict(), "./SavedModels/AEi3d//{}.pth".format(filesuffix))
-result.close()
-
+for epoch in range(epochs)

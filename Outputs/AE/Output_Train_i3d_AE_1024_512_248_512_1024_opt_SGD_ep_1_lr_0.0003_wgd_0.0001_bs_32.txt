@@ -31,4 +31,5 @@ Parameter Group 0
     weight_decay: 0.0001
 )
 Epoch 1
-Train Loss: 10455.52847290039
+
+test AUC: 34.49, best AUC: 34.49Best AUC: 34.4870320849555
