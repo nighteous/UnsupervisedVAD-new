@@ -1,0 +1,257 @@
+Learning Rate: 0.0003
+Weight Decay: 0.0001
+Epochs: 20
+Batch Size: 32
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=1024, out_features=512, bias=True)
+    (relu1): ReLU()
+    (batchnorm1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (dropout1): Dropout(p=0.6, inplace=False)
+    (linear2): Linear(in_features=512, out_features=256, bias=True)
+    (relu2): ReLU()
+    (batchnorm2): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (dropout2): Dropout(p=0.6, inplace=False)
+    (linear3): Linear(in_features=256, out_features=128, bias=True)
+    (relu3): ReLU()
+    (batchnorm3): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (dropout3): Dropout(p=0.6, inplace=False)
+  )
+  (decoder): Sequential(
+    (linear4): Linear(in_features=128, out_features=256, bias=True)
+    (relu4): ReLU()
+    (batchnorm4): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (linear5): Linear(in_features=256, out_features=512, bias=True)
+    (relu5): ReLU()
+    (batchnorm5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (linear6): Linear(in_features=512, out_features=1024, bias=True)
+    (relu6): ReLU()
+    (batchnorm6): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0003
+    maximize: False
+    weight_decay: 0.0001
+)
+
+N Trail: 0
+Epoch 1error normal: 425.041
+test AUC: 68.91, best AUC: 68.91
+Epoch 2error normal: 579.988
+test AUC: 50.45, best AUC: 68.91
+Epoch 3error normal: 594.795
+test AUC: 55.90, best AUC: 68.91
+Epoch 4error normal: 601.276
+test AUC: 53.81, best AUC: 68.91
+Epoch 5error normal: 601.175
+test AUC: 53.47, best AUC: 68.91
+Epoch 6error normal: 601.804
+test AUC: 52.22, best AUC: 68.91
+Epoch 7error normal: 600.661
+test AUC: 54.84, best AUC: 68.91
+Epoch 8error normal: 601.353
+test AUC: 53.83, best AUC: 68.91
+Epoch 9error normal: 601.091
+test AUC: 53.95, best AUC: 68.91
+Epoch 10error normal: 600.516
+test AUC: 55.23, best AUC: 68.91
+Epoch 11error normal: 600.938
+test AUC: 53.55, best AUC: 68.91
+Epoch 12error normal: 601.492
+test AUC: 53.47, best AUC: 68.91
+Epoch 13error normal: 601.113
+test AUC: 55.72, best AUC: 68.91
+Epoch 14error normal: 602.598
+test AUC: 52.18, best AUC: 68.91
+Epoch 15error normal: 601.218
+test AUC: 52.43, best AUC: 68.91
+Epoch 16error normal: 601.974
+test AUC: 53.17, best AUC: 68.91
+Epoch 17error normal: 602.227
+test AUC: 51.75, best AUC: 68.91
+Epoch 18error normal: 601.730
+test AUC: 54.14, best AUC: 68.91
+Epoch 19error normal: 601.529
+test AUC: 55.12, best AUC: 68.91
+Epoch 20error normal: 601.515
+test AUC: 52.78, best AUC: 68.91
+Best AUC: 68.90722062777228
+
+N Trail: 1
+Epoch 1error normal: 429.827
+test AUC: 54.82, best AUC: 54.82
+Epoch 2error normal: 585.667
+test AUC: 45.36, best AUC: 54.82
+Epoch 3error normal: 597.049
+test AUC: 60.97, best AUC: 60.97
+Epoch 4error normal: 597.986
+test AUC: 65.24, best AUC: 65.24
+Epoch 5error normal: 599.196
+test AUC: 64.04, best AUC: 65.24
+Epoch 6error normal: 599.469
+test AUC: 64.56, best AUC: 65.24
+Epoch 7error normal: 598.775
+test AUC: 64.81, best AUC: 65.24
+Epoch 8error normal: 598.795
+test AUC: 65.20, best AUC: 65.24
+Epoch 9error normal: 598.655
+test AUC: 65.88, best AUC: 65.88
+Epoch 10error normal: 600.148
+test AUC: 63.65, best AUC: 65.88
+Epoch 11error normal: 599.507
+test AUC: 64.07, best AUC: 65.88
+Epoch 12error normal: 600.642
+test AUC: 63.94, best AUC: 65.88
+Epoch 13error normal: 600.140
+test AUC: 64.22, best AUC: 65.88
+Epoch 14error normal: 600.098
+test AUC: 64.27, best AUC: 65.88
+Epoch 15error normal: 598.513
+test AUC: 64.79, best AUC: 65.88
+Epoch 16error normal: 600.704
+test AUC: 63.22, best AUC: 65.88
+Epoch 17error normal: 599.300
+test AUC: 64.58, best AUC: 65.88
+Epoch 18error normal: 599.729
+test AUC: 63.00, best AUC: 65.88
+Epoch 19error normal: 597.766
+test AUC: 64.96, best AUC: 65.88
+Epoch 20error normal: 599.101
+test AUC: 65.14, best AUC: 65.88
+Best AUC: 65.88462642527597
+
+N Trail: 2
+Epoch 1error normal: 420.323
+test AUC: 43.95, best AUC: 43.95
+Epoch 2error normal: 581.245
+test AUC: 54.94, best AUC: 54.94
+Epoch 3error normal: 593.400
+test AUC: 50.55, best AUC: 54.94
+Epoch 4error normal: 595.534
+test AUC: 44.91, best AUC: 54.94
+Epoch 5error normal: 596.356
+test AUC: 45.73, best AUC: 54.94
+Epoch 6error normal: 595.883
+test AUC: 44.87, best AUC: 54.94
+Epoch 7error normal: 596.735
+test AUC: 44.00, best AUC: 54.94
+Epoch 8error normal: 595.670
+test AUC: 45.69, best AUC: 54.94
+Epoch 9error normal: 596.403
+test AUC: 44.32, best AUC: 54.94
+Epoch 10error normal: 595.614
+test AUC: 45.67, best AUC: 54.94
+Epoch 11error normal: 595.782
+test AUC: 44.30, best AUC: 54.94
+Epoch 12error normal: 596.605
+test AUC: 45.29, best AUC: 54.94
+Epoch 13error normal: 595.819
+test AUC: 44.36, best AUC: 54.94
+Epoch 14error normal: 594.904
+test AUC: 47.78, best AUC: 54.94
+Epoch 15error normal: 594.117
+test AUC: 46.53, best AUC: 54.94
+Epoch 16error normal: 596.936
+test AUC: 43.06, best AUC: 54.94
+Epoch 17error normal: 597.194
+test AUC: 45.29, best AUC: 54.94
+Epoch 18error normal: 597.103
+test AUC: 44.23, best AUC: 54.94
+Epoch 19error normal: 596.047
+test AUC: 45.17, best AUC: 54.94
+Epoch 20error normal: 596.026
+test AUC: 43.68, best AUC: 54.94
+Best AUC: 54.93590639023599
+
+N Trail: 3
+Epoch 1error normal: 417.083
+test AUC: 52.55, best AUC: 52.55
+Epoch 2error normal: 567.288
+test AUC: 59.62, best AUC: 59.62
+Epoch 3error normal: 585.529
+test AUC: 45.55, best AUC: 59.62
+Epoch 4error normal: 589.289
+test AUC: 51.69, best AUC: 59.62
+Epoch 5error normal: 590.744
+test AUC: 54.64, best AUC: 59.62
+Epoch 6error normal: 592.182
+test AUC: 51.93, best AUC: 59.62
+Epoch 7error normal: 592.223
+test AUC: 50.63, best AUC: 59.62
+Epoch 8error normal: 592.522
+test AUC: 51.61, best AUC: 59.62
+Epoch 9error normal: 590.813
+test AUC: 52.30, best AUC: 59.62
+Epoch 10error normal: 591.662
+test AUC: 51.79, best AUC: 59.62
+Epoch 11error normal: 592.397
+test AUC: 51.34, best AUC: 59.62
+Epoch 12error normal: 591.333
+test AUC: 51.05, best AUC: 59.62
+Epoch 13error normal: 591.868
+test AUC: 50.32, best AUC: 59.62
+Epoch 14error normal: 591.526
+test AUC: 53.01, best AUC: 59.62
+Epoch 15error normal: 591.877
+test AUC: 51.18, best AUC: 59.62
+Epoch 16error normal: 591.145
+test AUC: 52.58, best AUC: 59.62
+Epoch 17error normal: 592.652
+test AUC: 50.94, best AUC: 59.62
+Epoch 18error normal: 591.953
+test AUC: 50.89, best AUC: 59.62
+Epoch 19error normal: 592.704
+test AUC: 51.10, best AUC: 59.62
+Epoch 20error normal: 592.161
+test AUC: 53.19, best AUC: 59.62
+Best AUC: 59.6240023160443
+
+N Trail: 4
+Epoch 1error normal: 428.949
+test AUC: 65.78, best AUC: 65.78
+Epoch 2error normal: 594.323
+test AUC: 43.00, best AUC: 65.78
+Epoch 3error normal: 602.185
+test AUC: 50.15, best AUC: 65.78
+Epoch 4error normal: 601.644
+test AUC: 50.10, best AUC: 65.78
+Epoch 5error normal: 600.709
+test AUC: 51.75, best AUC: 65.78
+Epoch 6error normal: 602.148
+test AUC: 49.41, best AUC: 65.78
+Epoch 7error normal: 602.009
+test AUC: 48.84, best AUC: 65.78
+Epoch 8error normal: 600.124
+test AUC: 50.77, best AUC: 65.78
+Epoch 9error normal: 601.322
+test AUC: 49.66, best AUC: 65.78
+Epoch 10error normal: 601.077
+test AUC: 51.16, best AUC: 65.78
+Epoch 11error normal: 600.781
+test AUC: 51.96, best AUC: 65.78
+Epoch 12error normal: 602.544
+test AUC: 48.57, best AUC: 65.78
+Epoch 13error normal: 602.203
+test AUC: 49.43, best AUC: 65.78
+Epoch 14error normal: 600.590
+test AUC: 50.80, best AUC: 65.78
+Epoch 15error normal: 600.258
+test AUC: 51.95, best AUC: 65.78
+Epoch 16error normal: 601.501
+test AUC: 50.51, best AUC: 65.78
+Epoch 17error normal: 601.331
+test AUC: 49.37, best AUC: 65.78
+Epoch 18error normal: 600.161
+test AUC: 52.02, best AUC: 65.78
+Epoch 19error normal: 600.694
+test AUC: 51.46, best AUC: 65.78
+Epoch 20error normal: 600.376
+test AUC: 50.26, best AUC: 65.78
+Best AUC: 65.78494111372308

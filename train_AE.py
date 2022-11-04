@@ -18,9 +18,9 @@ from typing import List
 def options():
     # Arguments to pass from terminal to make our lives easier
     parser = argparse.ArgumentParser(description='Training of AE')
-    parser.add_argument('--arch', 
-                        dest='arch', 
-                        type=str, 
+    parser.add_argument('--arch',
+                        dest='arch',
+                        type=str,
                         help="Architecture of the model Eg: 1,2,3,4")
 
     parser.add_argument('--lr', dest='lr', type=float, default=3e-4,help="Learning rate of model")
@@ -72,7 +72,7 @@ optimizer_name="Adam"
 optimizer = torch.optim.Adam(model.parameters(), lr = args.lr, weight_decay=args.weightdecay)
 criterion = nn.MSELoss()
 
-filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize) 
+filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize)
 
 try:
     result = open("Outputs/AE/Output_Train_{}.txt".format(filesuffix), "w")
