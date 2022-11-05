@@ -1,0 +1,83 @@
+Learning Rate: 0.0003
+Weight Decay: 0.0001
+Epochs: 20
+Batch Size: 8192
+AE(
+  (encoder): Sequential(
+    (linear1): Linear(in_features=2048, out_features=1024, bias=True)
+    (relu1): ReLU()
+    (dropout1): Dropout(p=0.6, inplace=False)
+    (linear2): Linear(in_features=1024, out_features=512, bias=True)
+    (relu2): ReLU()
+    (dropout2): Dropout(p=0.6, inplace=False)
+    (linear3): Linear(in_features=512, out_features=256, bias=True)
+    (relu3): ReLU()
+    (dropout3): Dropout(p=0.6, inplace=False)
+    (linear4): Linear(in_features=256, out_features=256, bias=True)
+    (relu4): ReLU()
+    (dropout4): Dropout(p=0.6, inplace=False)
+  )
+  (decoder): Sequential(
+    (linear5): Linear(in_features=256, out_features=512, bias=True)
+    (batchnorm5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu5): ReLU()
+    (linear6): Linear(in_features=512, out_features=1024, bias=True)
+    (batchnorm6): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu6): ReLU()
+    (linear7): Linear(in_features=1024, out_features=2048, bias=True)
+    (batchnorm7): BatchNorm1d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (relu7): ReLU()
+  )
+)
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    eps: 1e-08
+    foreach: None
+    lr: 0.0003
+    maximize: False
+    weight_decay: 0.0001
+)
+Epoch 1
+Train Loss: 605.2513914562408
+Epoch 2
+Train Loss: 141.7819523584275
+Epoch 3
+Train Loss: 24.697692099071684
+Epoch 4
+Train Loss: 22.009159723917644
+Epoch 5
+Train Loss: 22.384104864937918
+Epoch 6
+Train Loss: 22.186514536539715
+Epoch 7
+Train Loss: 21.616203126453218
+Epoch 8
+Train Loss: 21.78240222022647
+Epoch 9
+Train Loss: 21.945859863644554
+Epoch 10
+Train Loss: 22.28096308026995
+Epoch 11
+Train Loss: 21.714641480218795
+Epoch 12
+Train Loss: 21.89129570552281
+Epoch 13
+Train Loss: 22.197284698486328
+Epoch 14
+Train Loss: 21.98915940239316
+Epoch 15
+Train Loss: 21.87305214291527
+Epoch 16
+Train Loss: 21.36313670022147
+Epoch 17
+Train Loss: 21.76903524852934
+Epoch 18
+Train Loss: 22.01110213143485
+Epoch 19
+Train Loss: 23.054881867908296
+Epoch 20
+Train Loss: 21.695222945440385
+Time taken by 20 epochs: 48.32413291931152

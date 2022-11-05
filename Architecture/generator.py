@@ -4,21 +4,20 @@ import torch.nn as nn
 
 class AE(nn.Module):
 
-    def __init__(self, list):
+    def __init__(self, list, p):
         super().__init__()
 
         # Traversing through the list to form both encoder and decoder layers
-
-        if list[0] > 2048 or list[-1] > 2048:
-            # for resnext features
-            raise Exception("Feauture input or output must be of 2048")
 
         encoder_layers = []
         for i in range(len(list)):
             if list[i] < list[i+1]:
                 break
             
-            layerName = [('linear{}'.format(i + 1), nn.Linear(list[i], list[i+1]),), ('batchnorm{}'.format(i +1), nn.BatchNorm1d(list[i+1])), ('relu{}'.format(i +1), nn.ReLU())]
+            layerName = [('linear{}'.format(i + 1), nn.Linear(list[i], list[i+1]),), 
+                        # ('batchnorm{}'.format(i + 1), nn.BatchNorm1d(list[i+1])), 
+                        ('relu{}'.format(i + 1), nn.ReLU()),
+                        ('dropout{}'.format(i + 1), nn.Dropout(p))]
 
             encoder_layers.extend(layerName)
 

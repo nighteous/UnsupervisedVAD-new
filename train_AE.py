@@ -16,27 +16,22 @@ import matplotlib.pyplot as plt
 from typing import List
 import wandb
 
-
 def options():
     # Arguments to pass from terminal to make our lives easier
     parser = argparse.ArgumentParser(description='Training of AE')
-    parser.add_argument('--arch', 
-                        dest='arch', 
-                        type=str, 
+    parser.add_argument('--arch',
+                        dest='arch',
+                        type=str,
                         help="Architecture of the model Eg: 1,2,3,4")
 
     parser.add_argument('--lr', dest='lr', type=float, default=3e-4,help="Learning rate of model")
-
     parser.add_argument('--epochs', dest='epochs', type=int, default=20, help="Number of Epochs to train model")
-
-    parser.add_argument('--batch-size', dest='batchsize', type=int, default=128, help="Batch size of data")
-
+    parser.add_argument('--n', dest='n_trails', type=int, default=5, help ="Number of times to train the model")
+    parser.add_argument('--batch-size', dest='batchsize', type=int, default=32, help="Batch size of data")
     parser.add_argument('--weight-decay', dest='weightdecay', type=float, default=1e-4, help="Weight decay")
-
-    parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='Adam', help="Optimizer to be used -> Doesn't work")
-
-    parser.add_argument('--count', dest='count', type=int, default=0, help="Count for handling project names")
-
+    parser.add_argument('--dropout', dest='dropout', type=float, default=0.6, help ="Dropout layer value, default: 0.6")
+    parser.add_argument('--optimizer', dest='optimizer_name', type=str, default='SGD', help="Optimizer to be used\n1. SGD\n2. Adam")
+    parser.add_argument('--count', dest='count', type=int, default=1, help="Count of which model (only needed for wandb)")
 
     return parser.parse_args()
 
@@ -47,7 +42,7 @@ args = options()
 wandb.init(project="autoencoder{}".format(args.count), config = args)
 
 
-FeatsPath = "/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/FeaturesResnext/"
+FeatsPath = "/shared/home/v_varenyam_bhardwaj/local_scratch/Dataset/UCFResnext/different_dataset_splits/"
 train_normal_feats = np.load(FeatsPath + "normal_train_set_video_features.npy")
 
 
@@ -55,7 +50,7 @@ device = torch.device("cuda:0")
 
 # Architecture of AE
 model_arch = [int(i) for i in args.arch.split(',')]
-model = AE(model_arch).to(device)
+model = AE(model_arch, 0.6).to(device)
 
 wandb.watch(model, log_freq = 100)
 
@@ -78,10 +73,12 @@ train_dataset = DataLoader(train_normal_feats,
                            num_workers=8
                )
 
-# IDK how to decide this one
-optimizer_name="Adam"
-optimizer = torch.optim.Adam(model.parameters(), lr = args.lr, weight_decay=args.weightdecay)
-criterion = nn.MSELoss()
+
+
+if args.optimizer_name.lower() == "sgd":
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
+elif args.optimizer_name.lower() == "adam":
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weightdecay)
 
 filesuffix = "{}_opt_{}_ep_{}_lr_{}_wgd_{}_bs_{}".format(model_name, args.optimizer_name, args.epochs, args.lr ,args.weightdecay, args.batchsize) 
 
@@ -108,6 +105,7 @@ startTime = time.time()
 
 for epoch in range(epochs):
 
+    am_mil = __import__('utils').AverageMeter()
     train_loss = 0
 
     print("Epoch {}".format(epoch+1))
@@ -118,31 +116,36 @@ for epoch in range(epochs):
     for idx, img in tqdm(enumerate(train_dataset)):
 
         img = img.to(device)
-        optimizer.zero_grad()
+        
 
         prediction = model(img)
 
-        loss = criterion(prediction, img)
-        train_loss += loss.item()*img.size(0)
+        # Previous method of calculating loss
+        # loss = criterion(prediction, img)
+        # train_loss += loss.item()*img.size(0)
 
+        loss = torch.abs(prediction - img)
+        loss = loss.sum(1).mean(0)
+
+
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        if idx % 100: 
-            wandb.log({"Loss": train_loss})
+        am_mil.update(loss.item())
 
 
-    train_loss /= len(train_dataset)
-    loss_values_train.append(train_loss)
+    loss_values_train.append(am_mil.avg)
 
-    wandb.log({"Train Loss": train_loss})
+    wandb.log({"Train Loss": am_mil.avg})
 
-    print("Train Loss: {}".format(train_loss))
-    result.write("Train Loss: {}\n".format(train_loss))
+    print("Train Loss: {}".format(am_mil.avg))
+    result.write("Train Loss: {}\n".format(am_mil.avg))
 
 endTime = time.time()
 
-result.write("Time taken by {} epochs: {}".format(epochs, (endTime - startTime)/60))
+print("Time taken by {} epochs: {}".format(epochs, (endTime - startTime)))
+result.write("Time taken by {} epochs: {}".format(epochs, (endTime - startTime)))
 
 np.save('Losses/AE/Loss_Train_{}.npy'.format(filesuffix), loss_values_train)
 torch.save(model.state_dict(), 'SavedModels/AE/{}.pth'.format(filesuffix))
